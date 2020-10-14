@@ -16,8 +16,5 @@ class MongoConfig(private val settings: MongoClientSettings) {
     }
 
     @Singleton
-    fun databaseClient(client: MongoClient): MongoDatabase {
-        println("============")
-        return client.getDatabase(settings.applicationName).withKMongo()
-    }
+    fun databaseClient(client: MongoClient): MongoDatabase = client.getDatabase(settings.applicationName).withKMongo()
 }

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val kotlinVersion: String by project
 val micronautVersion: String by project
 val reactorVersion: String by project
@@ -34,8 +36,8 @@ subprojects {
     dependencies {
         kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
         kapt("io.micronaut:micronaut-inject-java")
-        implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
-        implementation(platform("io.projectreactor:reactor-bom:$reactorVersion"))
+        api(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+        api(platform("io.projectreactor:reactor-bom:$reactorVersion"))
         api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
         api("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     }
@@ -44,6 +46,15 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_11
         withJavadocJar()
         withSourcesJar()
+    }
+
+    tasks {
+        withType<KotlinCompile> {
+            kotlinOptions {
+                jvmTarget = "11"
+                javaParameters = true
+            }
+        }
     }
 
     allOpen {
