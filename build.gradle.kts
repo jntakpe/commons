@@ -36,8 +36,8 @@ subprojects {
         kapt("io.micronaut:micronaut-inject-java")
         implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
         implementation(platform("io.projectreactor:reactor-bom:$reactorVersion"))
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-        implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+        api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+        api("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     }
 
     java {

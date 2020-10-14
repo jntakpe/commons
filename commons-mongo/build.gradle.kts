@@ -1,4 +1,3 @@
-val micronautVersion: String by project
 val kMongoVersion: String by project
 
 dependencies {
