@@ -1,7 +1,6 @@
 val kotlinVersion: String by project
 val micronautVersion: String by project
 val reactorVersion: String by project
-val kMongoVersion: String by project
 
 plugins {
     idea
@@ -9,36 +8,53 @@ plugins {
     `maven-publish`
     val kotlinVersion = "1.4.10"
     kotlin("jvm") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
+    kotlin("plugin.allopen") version kotlinVersion
 }
 
-group = "com.github.jntakpe"
-version = "0.1.0"
+allprojects {
+    apply(plugin = "idea")
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
+    apply(plugin = "kotlin")
+    apply(plugin = "kotlin-kapt")
+    apply(plugin = "kotlin-allopen")
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
 }
 
-dependencies {
-    implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
-    implementation(platform("io.projectreactor:reactor-bom:$reactorVersion"))
-    implementation("org.litote.kmongo:kmongo-async-serialization:$kMongoVersion")
-    implementation("io.grpc:grpc-core")
-    implementation("org.slf4j:slf4j-api")
-    implementation("io.projectreactor:reactor-core")
-}
+subprojects {
+    group = "com.github.jntakpe"
+    version = "0.1.1"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    withJavadocJar()
-    withSourcesJar()
-}
+    dependencies {
+        kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+        kapt("io.micronaut:micronaut-inject-java")
+        implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+        implementation(platform("io.projectreactor:reactor-bom:$reactorVersion"))
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenProto") {
-            from(components.findByName("java"))
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    allOpen {
+        annotation("io.micronaut.aop.Around")
+    }
+
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                from(components.findByName("java"))
+            }
         }
     }
 }

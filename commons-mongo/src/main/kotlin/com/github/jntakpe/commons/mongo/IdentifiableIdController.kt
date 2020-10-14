@@ -1,4 +1,4 @@
-package com.github.jntakpe.commons
+package com.github.jntakpe.commons.mongo
 
 import org.litote.kmongo.serialization.IdController
 import kotlin.reflect.KClass

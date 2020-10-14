@@ -1,4 +1,4 @@
-package com.github.jntakpe.commons
+package com.github.jntakpe.commons.context
 
 import io.grpc.Metadata
 import io.grpc.Status
@@ -6,7 +6,7 @@ import io.grpc.StatusRuntimeException
 
 class CommonException(
     override val message: String,
-    val logging: ErrorLoggingFunction,
+    val logging: (String, Throwable) -> Unit,
     code: Status.Code,
     cause: Throwable? = null,
     metadata: Metadata? = null

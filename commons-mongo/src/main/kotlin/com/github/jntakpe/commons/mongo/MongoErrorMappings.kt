@@ -1,5 +1,6 @@
-package com.github.jntakpe.commons
+package com.github.jntakpe.commons.mongo
 
+import com.github.jntakpe.commons.context.CommonException
 import com.mongodb.ErrorCategory.DUPLICATE_KEY
 import com.mongodb.ErrorCategory.fromErrorCode
 import com.mongodb.MongoWriteException
