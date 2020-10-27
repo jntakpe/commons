@@ -25,7 +25,6 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
     }
 }
 
@@ -63,8 +62,50 @@ subprojects {
 
     publishing {
         publications {
-            create<MavenPublication>("maven") {
+            create<MavenPublication>("mavenJava") {
                 from(components.findByName("java"))
+                pom {
+                    name.set(project.name)
+                    description.set("Common's library")
+                    url.set("https://github.com/equidis/commons")
+                    licenses {
+                        license {
+                            name.set("MIT License")
+                            url.set("https://opensource.org/licenses/MIT")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("jntakpe")
+                            name.set("Jocelyn NTAKPE")
+                        }
+                    }
+                    issueManagement {
+                        system.set("Github issues")
+                        url.set("https://github.com/equidis/commons/issues")
+                    }
+                    ciManagement {
+                        system.set("Github actions")
+                        url.set("https://github.com/equidis/commons/actions")
+                    }
+                    scm {
+                        connection.set("scm:git:git@github.com:equidis/commons.git")
+                        developerConnection.set("scm:git:git@github.com:equidis/commons.git")
+                        url.set("https://github.com/equidis/commons/")
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                name = "Github_packages"
+                setUrl("https://maven.pkg.github.com/equidis/commons")
+                credentials {
+                    val githubActor: String? by project
+                    val githubToken: String? by project
+                    username = githubActor
+                    password = githubToken
+                }
             }
         }
     }
