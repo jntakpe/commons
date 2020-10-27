@@ -22,7 +22,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties', 'gradle/**') }}
           restore-keys: -${{ runner.os }}-gradle-
       - name: Publish artifacts
-        run: ./gradlew -p library publish
+        run: ./gradlew publish
         env:
           ORG_GRADLE_PROJECT_githubActor: ${{ env.GITHUB_ACTOR }}
           ORG_GRADLE_PROJECT_githubToken: ${{ secrets.GITHUB_TOKEN }}
