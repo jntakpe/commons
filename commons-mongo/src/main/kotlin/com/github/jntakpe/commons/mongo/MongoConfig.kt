@@ -3,6 +3,7 @@ package com.github.jntakpe.commons.mongo
 import com.mongodb.MongoClientSettings
 import com.mongodb.reactivestreams.client.MongoClient
 import com.mongodb.reactivestreams.client.MongoDatabase
+import com.mongodb.reactor.client.toReactor
 import io.micronaut.context.annotation.Factory
 import org.litote.kmongo.reactivestreams.withKMongo
 import org.litote.kmongo.serialization.changeIdController
@@ -16,5 +17,5 @@ class MongoConfig(private val settings: MongoClientSettings) {
     }
 
     @Singleton
-    fun databaseClient(client: MongoClient): MongoDatabase = client.getDatabase(settings.applicationName).withKMongo()
+    fun databaseClient(client: MongoClient): MongoDatabase = client.getDatabase(settings.applicationName).withKMongo().toReactor()
 }
