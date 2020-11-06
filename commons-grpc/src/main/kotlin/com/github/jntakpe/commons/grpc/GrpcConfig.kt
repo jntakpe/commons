@@ -8,13 +8,15 @@ import io.grpc.ServerInterceptor
 import io.grpc.protobuf.services.ProtoReflectionService
 import io.grpc.util.TransmitStatusRuntimeExceptionInterceptor
 import io.micronaut.context.annotation.Factory
+import java.util.stream.Stream
 import javax.inject.Singleton
+import kotlin.streams.toList
 
 @Factory
 class GrpcConfig {
 
     @Singleton
-    fun validatorInterceptor(validators: Iterable<GrpcValidator<Any>>): ValidatingServerInterceptor {
+    fun validatorInterceptor(validators: Stream<GrpcValidator<Any>>): ValidatingServerInterceptor {
         val index = validators.toList()
             .foldRight(ExplicitValidatorIndex()) { c, a -> a.add(c.payload.java, c.validator) }
         return ValidatingServerInterceptor(index)
