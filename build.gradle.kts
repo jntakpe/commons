@@ -31,7 +31,7 @@ allprojects {
 
 subprojects {
     group = "com.github.jntakpe"
-    version = "0.1.7"
+    version = "0.1.8"
 
     dependencies {
         kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
