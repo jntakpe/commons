@@ -17,7 +17,7 @@ class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager:
     private val log = logger()
     private val cache = cacheManager.getCache(cacheName).async()
 
-    fun <T> find(key: Any, type: Class<T>): CacheMissMono<T> {
+    fun <T> find(key: Any, type: Class<T>): Mono<T> {
         return Mono.fromFuture(cache.get(key, type))
             .doOnSubscribe { log.debug("Searching {} from cache {}", key, cacheName) }
             .flatMap { Mono.justOrEmpty(it) }
@@ -25,12 +25,22 @@ class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager:
             .switchIfEmpty { log.debug("Key {} not found in {}", key, cacheName).run { Mono.empty() } }
             .doOnError { log.warn("Unable to retrieve {} from cache {}", key, cacheName, it) }
             .onErrorResume { Mono.empty() }
-            .let { CacheMissMono(it) }
     }
 
     @JvmSynthetic
-    inline fun <reified T : Any> find(key: Any): CacheMissMono<T> {
+    inline fun <reified T> find(key: Any): Mono<T> {
         return find(key, T::class.java)
+    }
+
+    fun <K : Any, T> orPutOnCacheMiss(key: K, type: Class<T>, onCacheMiss: (K) -> Mono<T>): Mono<T> {
+        return find(key, type)
+            .switchIfEmpty { onCacheMiss(key).doOnNext { putAndForget(key, it) } }
+    }
+
+    @JvmSynthetic
+    inline fun <K : Any, reified T> orPutOnCacheMiss(key: K, noinline onCacheMiss: (K) -> Mono<T>): Mono<T> {
+        return find<T>(key)
+            .switchIfEmpty { onCacheMiss(key).doOnNext { putAndForget(key, it) } }
     }
 
     fun <T> put(key: Any, data: T): Mono<T> {
