@@ -1,5 +1,6 @@
 rootProject.name = "commons"
 
+include("commons-cache")
 include("commons-context")
 include("commons-grpc")
 include("commons-grpc-test")
