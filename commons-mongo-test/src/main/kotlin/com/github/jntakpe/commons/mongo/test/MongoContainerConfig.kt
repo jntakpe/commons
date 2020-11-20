@@ -8,7 +8,7 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Replaces
 
 @Factory
-class ContainerConfig {
+class MongoContainerConfig {
 
     @Bean(preDestroy = "close")
     @Replaces(bean = MongoClient::class)
