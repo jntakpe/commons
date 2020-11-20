@@ -22,7 +22,7 @@ class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager:
             .doOnSubscribe { log.debug("Searching {} from cache {}", key, cacheName) }
             .flatMap { Mono.justOrEmpty(it) }
             .doOnNext { log.debug("{} retrieved from cache {} with key {}", it, cacheName, key) }
-            .switchIfEmpty { log.debug("Key {} not found in {}", key, cacheName).run { Mono.empty() } }
+            .switchIfEmpty { log.debug("Key {} not found in cache {}", key, cacheName).run { Mono.empty() } }
             .doOnError { log.warn("Unable to retrieve {} from cache {}", key, cacheName, it) }
             .onErrorResume { Mono.empty() }
     }
@@ -45,12 +45,12 @@ class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager:
 
     fun <T> put(key: Any, data: T): Mono<T> {
         return Mono.fromFuture(cache.put(key, data))
-            .doOnSubscribe { log.debug("Caching key {} in {}", key, cacheName) }
+            .doOnSubscribe { log.debug("Caching key {} in cache {}", key, cacheName) }
             .filter { it }
-            .doOnSuccess { log.debug("Key {} cached in {}", key, cacheName) }
+            .doOnSuccess { log.debug("Key {} cached in cache {}", key, cacheName) }
             .map { data }
-            .switchIfEmpty { Mono.just(data).doOnSubscribe { log.debug("Key {} not cached in {}", key, cacheName) } }
-            .doOnError { log.warn("Unable to cache key {} in {}", key, cacheName, it) }
+            .switchIfEmpty { Mono.just(data).doOnSubscribe { log.debug("Key {} not cached in cache {}", key, cacheName) } }
+            .doOnError { log.warn("Unable to cache key {} in cache {}", key, cacheName, it) }
             .onErrorReturn(data)
     }
 
@@ -60,11 +60,11 @@ class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager:
 
     fun evict(key: Any): Mono<Void> {
         return Mono.fromFuture(cache.invalidate(key))
-            .doOnSubscribe { log.debug("Evicting {} from {}", key, cacheName) }
+            .doOnSubscribe { log.debug("Evicting {} from cache {}", key, cacheName) }
             .filter { it }
-            .doOnSuccess { log.debug("{} evicted from {}", key, cacheName) }
-            .switchIfEmpty { log.debug("Key {} not evicted from {}", key, cacheName).run { Mono.empty() } }
-            .doOnError { log.warn("Unable to evict {} from {}", key, cacheName) }
+            .doOnSuccess { log.debug("{} evicted from cache {}", key, cacheName) }
+            .switchIfEmpty { log.debug("Key {} not evicted from cache {}", key, cacheName).run { Mono.empty() } }
+            .doOnError { log.warn("Unable to evict {} from cache {}", key, cacheName) }
             .onErrorResume { Mono.empty() }
             .then()
     }
