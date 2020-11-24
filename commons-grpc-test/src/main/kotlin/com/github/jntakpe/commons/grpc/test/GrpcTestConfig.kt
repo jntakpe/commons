@@ -11,6 +11,7 @@ import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Replaces
 import io.micronaut.grpc.channels.GrpcManagedChannelFactory
 import java.util.function.Supplier
+import javax.inject.Singleton
 
 @Factory
 @Replaces(factory = GrpcManagedChannelFactory::class)
@@ -23,6 +24,7 @@ class GrpcTestConfig(services: List<Supplier<BindableService>>) {
     private val logger = logger()
 
     @Primary
+    @Singleton
     @Bean(preDestroy = "shutdown")
     fun managedChannel(@Parameter target: String): ManagedChannel {
         logger.info("Creating mocked channel for target $target")

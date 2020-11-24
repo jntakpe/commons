@@ -6,10 +6,12 @@ import io.micronaut.configuration.mongo.core.DefaultMongoConfiguration
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Replaces
+import javax.inject.Singleton
 
 @Factory
 class MongoContainerConfig {
 
+    @Singleton
     @Bean(preDestroy = "close")
     @Replaces(bean = MongoClient::class)
     fun mongoContainerClient(initConfig: DefaultMongoConfiguration): MongoClient {
