@@ -1,4 +1,4 @@
-package com.github.jntakpe.commons.tracing
+package com.github.jntakpe.commons.tracing.grpc
 
 import brave.Tracing
 import brave.grpc.GrpcTracing
