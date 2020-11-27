@@ -1,5 +1,6 @@
 package com.github.jntakpe.commons.cache
 
+import com.github.jntakpe.commons.context.ReactorTracingOperator
 import com.github.jntakpe.commons.context.logger
 import io.micronaut.cache.CacheManager
 import io.micronaut.configuration.lettuce.RedisSetting
@@ -12,7 +13,11 @@ import reactor.kotlin.core.publisher.switchIfEmpty
 
 @EachProperty(RedisSetting.REDIS_CACHES)
 @Requires(classes = [RedisCache::class])
-class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager: CacheManager<RedisCache>) {
+class RedisReactiveCache(
+    @Parameter private val cacheName: String,
+    private val tracingOperator: ReactorTracingOperator,
+    cacheManager: CacheManager<RedisCache>,
+) {
 
     private val log = logger()
     private val cache = cacheManager.getCache(cacheName).async()
@@ -20,6 +25,7 @@ class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager:
     fun <T> find(key: Any, type: Class<T>): Mono<T> {
         return Mono.fromFuture(cache.get(key, type))
             .doOnSubscribe { log.debug("Searching {} from cache {}", key, cacheName) }
+            .transform(tracingOperator.operator())
             .flatMap { Mono.justOrEmpty(it) }
             .doOnNext { log.debug("{} retrieved from cache {} with key {}", it, cacheName, key) }
             .switchIfEmpty { log.debug("Key {} not found in cache {}", key, cacheName).run { Mono.empty() } }
@@ -46,6 +52,7 @@ class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager:
     fun <T> put(key: Any, data: T): Mono<T> {
         return Mono.fromFuture(cache.put(key, data))
             .doOnSubscribe { log.debug("Caching key {} in cache {}", key, cacheName) }
+            .transform(tracingOperator.operator())
             .filter { it }
             .doOnSuccess { log.debug("Key {} cached in cache {}", key, cacheName) }
             .map { data }
@@ -61,6 +68,7 @@ class RedisReactiveCache(@Parameter private val cacheName: String, cacheManager:
     fun evict(key: Any): Mono<Void> {
         return Mono.fromFuture(cache.invalidate(key))
             .doOnSubscribe { log.debug("Evicting {} from cache {}", key, cacheName) }
+            .transform(tracingOperator.operator())
             .filter { it }
             .doOnSuccess { log.debug("{} evicted from cache {}", key, cacheName) }
             .switchIfEmpty { log.debug("Key {} not evicted from cache {}", key, cacheName).run { Mono.empty() } }
