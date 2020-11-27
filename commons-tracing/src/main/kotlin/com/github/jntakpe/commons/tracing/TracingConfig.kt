@@ -10,6 +10,7 @@ import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.env.Environment
 import io.micronaut.runtime.ApplicationConfiguration
+import io.micronaut.scheduling.instrument.ReactiveInvocationInstrumenterFactory
 import javax.inject.Singleton
 
 @Factory
@@ -27,5 +28,8 @@ class TracingConfig(private val appConfig: ApplicationConfiguration) {
     }
 
     @Singleton
-    fun tracingInstrumenter(tracing: Tracing) = TracingInvocationInstrumenter(tracing)
+    fun tracingInstrumenter(tracing: Tracing): ReactiveInvocationInstrumenterFactory = TracingInvocationInstrumenter(tracing)
+
+    @Singleton
+    fun braveTracingOperator(tracing: Tracing): ReactorTracingOperator = BraveReactorTracingOperator(tracing)
 }
