@@ -1,6 +1,6 @@
-package com.github.jntakpe.availability.config.tracing
+package com.github.jntakpe.commons.tracing
 
-import com.github.jntakpe.availability.config.tracing.ReactorTracingProperties.Companion.TRACING_REACTOR_PREFIX
+import com.github.jntakpe.commons.tracing.ReactorTracingProperties.Companion.TRACING_REACTOR_PREFIX
 import io.micronaut.context.annotation.ConfigurationProperties
 import io.micronaut.context.annotation.Requires
 import io.micronaut.core.bind.annotation.Bindable

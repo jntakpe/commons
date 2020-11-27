@@ -5,7 +5,7 @@ import brave.context.slf4j.MDCScopeDecorator
 import brave.handler.SpanHandler
 import brave.propagation.ThreadLocalCurrentTraceContext
 import brave.sampler.Sampler
-import com.github.jntakpe.availability.config.tracing.TracingInvocationInstrumenter
+import com.github.jntakpe.commons.context.ReactorTracingOperator
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.env.Environment

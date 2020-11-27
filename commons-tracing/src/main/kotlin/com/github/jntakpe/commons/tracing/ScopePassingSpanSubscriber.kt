@@ -1,4 +1,4 @@
-package com.github.jntakpe.availability.config.tracing
+package com.github.jntakpe.commons.tracing
 
 import brave.propagation.CurrentTraceContext
 import brave.propagation.TraceContext
