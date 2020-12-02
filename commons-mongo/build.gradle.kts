@@ -6,4 +6,5 @@ dependencies {
     api("io.micronaut.mongodb:micronaut-mongo-reactive")
     api("org.litote.kmongo:kmongo-reactor-serialization:$kMongoVersion")
     implementation("io.micronaut:micronaut-inject")
+    compileOnly("io.zipkin.brave:brave-instrumentation-mongodb")
 }
