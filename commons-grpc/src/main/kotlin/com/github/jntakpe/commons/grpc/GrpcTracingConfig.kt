@@ -1,4 +1,4 @@
-package com.github.jntakpe.commons.tracing.grpc
+package com.github.jntakpe.commons.grpc
 
 import brave.Tracing
 import brave.grpc.GrpcTracing
@@ -9,7 +9,7 @@ import io.micronaut.context.annotation.Requires
 import javax.inject.Singleton
 
 @Factory
-@Requires(classes = [ClientInterceptor::class, ServerInterceptor::class])
+@Requires(beans = [Tracing::class], classes = [GrpcTracing::class])
 class GrpcTracingConfig {
 
     @Singleton

@@ -7,4 +7,5 @@ dependencies {
     api("io.micronaut.grpc:micronaut-grpc-runtime")
     api("io.envoyproxy.protoc-gen-validate:pgv-java-grpc:$grpcPgvVersion")
     api("com.salesforce.servicelibs:reactor-grpc-stub:$grpcReactorVersion")
+    compileOnly("io.zipkin.brave:brave-instrumentation-grpc")
 }
