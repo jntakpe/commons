@@ -3,5 +3,5 @@ dependencies {
     api(project(":commons-micronaut"))
     api("io.zipkin.brave:brave-context-slf4j")
     api("io.zipkin.brave:brave-instrumentation-grpc")
-    compileOnly("io.grpc:grpc-core")
+    api("io.zipkin.brave:brave-instrumentation-mongodb")
 }
