@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val kotlinVersion: String by project
 val micronautVersion: String by project
 val reactorVersion: String by project
+val braveVersion: String by project
 
 plugins {
     idea
@@ -38,6 +39,7 @@ subprojects {
         kapt("io.micronaut:micronaut-inject-java")
         api(platform("io.micronaut:micronaut-bom:$micronautVersion"))
         api(platform("io.projectreactor:reactor-bom:$reactorVersion"))
+        api(platform("io.zipkin.brave:brave-bom:$braveVersion"))
         api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
         api("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
     }
