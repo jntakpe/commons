@@ -35,9 +35,9 @@ subprojects {
     version = "0.1.13"
 
     dependencies {
-        kapt(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+        kapt(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
         kapt("io.micronaut:micronaut-inject-java")
-        api(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+        api(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
         api(platform("io.projectreactor:reactor-bom:$reactorVersion"))
         api(platform("io.zipkin.brave:brave-bom:$braveVersion"))
         api("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
