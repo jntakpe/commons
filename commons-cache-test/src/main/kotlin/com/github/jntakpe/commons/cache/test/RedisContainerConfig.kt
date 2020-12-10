@@ -1,5 +1,6 @@
 package com.github.jntakpe.commons.cache.test
 
+import com.github.jntakpe.commons.context.logger
 import io.micronaut.configuration.lettuce.AbstractRedisConfiguration
 import io.micronaut.configuration.lettuce.DefaultRedisConfiguration
 import io.micronaut.context.annotation.Primary
@@ -12,8 +13,12 @@ import javax.inject.Singleton
 @Replaces(DefaultRedisConfiguration::class)
 class RedisContainerConfig : AbstractRedisConfiguration() {
 
+    private val log = logger()
+
     init {
         val container = RedisContainer.instance
-        setUri(URI.create("redis://${container.containerIpAddress}:${container.firstMappedPort}"))
+        val redisUri = URI.create("redis://${container.containerIpAddress}:${container.firstMappedPort}")
+        log.debug("Setting Redis container URI to $redisUri")
+        setUri(redisUri)
     }
 }

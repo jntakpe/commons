@@ -16,16 +16,16 @@ import java.util.function.Supplier
 @Replaces(factory = GrpcManagedChannelFactory::class)
 class GrpcTestConfig(services: List<Supplier<BindableService>>) {
 
+    private val logger = logger()
+
     init {
         GrpcMockServer.start(services.map { it.get() })
     }
 
-    private val logger = logger()
-
     @Primary
     @Bean(preDestroy = "shutdown")
     fun managedChannel(@Parameter target: String): ManagedChannel {
-        logger.info("Creating mocked channel for target $target")
+        logger.debug("Creating mocked GRPC channel for target $target")
         return InProcessChannelBuilder
             .forName(GrpcMockServer.name)
             .directExecutor()
