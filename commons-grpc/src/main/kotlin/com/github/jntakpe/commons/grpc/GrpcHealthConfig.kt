@@ -1,5 +1,6 @@
 package com.github.jntakpe.commons.grpc
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Requires
 import io.micronaut.management.health.indicator.HealthIndicator
@@ -11,10 +12,10 @@ import javax.inject.Singleton
 class GrpcHealthConfig {
 
     @Singleton
-    fun healthAggregator(applicationConfiguration: ApplicationConfiguration) = ReactorHealthAggregator(applicationConfiguration)
+    fun healthAggregator(appConfiguration: ApplicationConfiguration) = ReactorHealthAggregator(appConfiguration)
 
     @Singleton
-    fun healthEndpoint(aggregator: ReactorHealthAggregator, indicators: Array<HealthIndicator>): GrpcHealthEndpoint {
-        return GrpcHealthEndpoint(aggregator, indicators)
+    fun healthEndpoint(aggregator: ReactorHealthAggregator, indicators: Array<HealthIndicator>, mapper: ObjectMapper): GrpcHealthEndpoint {
+        return GrpcHealthEndpoint(aggregator, indicators, mapper)
     }
 }
