@@ -9,7 +9,7 @@ plugins {
     idea
     `java-library`
     `maven-publish`
-    val kotlinVersion = "1.4.30"
+    val kotlinVersion = "1.5.10"
     kotlin("jvm") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     kotlin("plugin.allopen") version kotlinVersion
